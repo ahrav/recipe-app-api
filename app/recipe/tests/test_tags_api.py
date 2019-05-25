@@ -23,7 +23,7 @@ class PublicTagsApiTests(TestCase):
         """Test that login is required for retrieving tags"""
         res = self.client.get(TAGS_URL)
 
-        self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
 
 
 class PrivateTagsApiTests(TestCase):
@@ -44,7 +44,7 @@ class PrivateTagsApiTests(TestCase):
 
         res = self.client.get(TAGS_URL)
 
-        tags = Tag.objects.all().order_by('-name')
+        tags = Tag.objects.all().order_by('name')
         serializer = TagSerializer(tags, many=True)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data, serializer.data)
